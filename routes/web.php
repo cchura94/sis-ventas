@@ -5,6 +5,8 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\RolePermisosController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,7 +41,20 @@ Route::prefix("/admin")->group(function(){
     Route::resource("/producto", ProductoController::class);
     Route::resource("/cliente", ClienteController::class);
     Route::resource("/proveedor", ProveedorController::class);
-    Route::resource("/pedido", PedidoController::class);   
+    Route::resource("/pedido", PedidoController::class);
 
+    Route::post("/usuario/{id_user}/asinar_role", [UsuarioController::class, "asignarRoleAUsuario"])->name("asignar_role_usuario");
+    Route::resource("/usuario", UsuarioController::class);
+    
+    Route::get("/permisos", [RolePermisosController::class, "principal"])->name('permisos_index');
+    
+    Route::post("/permisos", [RolePermisosController::class, "guardarPermisos"])->name('guardar_permiso');
+    Route::post("/permisos/roles", [RolePermisosController::class, "guardarRoles"])->name('guardar_roles');
+    Route::post("/permisos/roles/muchos", [RolePermisosController::class, "sincronizarPermisosRole"])->name('sincronizar_permisos_role');
+    Route::post("/permisos/roles/{id_rol}/eliminar", [RolePermisosController::class, "eliminarPermisodeRol"])->name('eliminar_permiso_rol');
+    Route::post("/permisos/roles/{id_rol}", [RolePermisosController::class, "asignarPermisoARol"])->name('asignar_permiso_rol');
+    
+
+    
 });
 

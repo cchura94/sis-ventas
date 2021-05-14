@@ -313,10 +313,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('usuario.index') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Usuarios
+                <span class="right badge badge-danger">Nuevo</span>
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('permisos_index') }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Permisos
                 <span class="right badge badge-danger">Nuevo</span>
               </p>
             </a>
