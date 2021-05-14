@@ -13,9 +13,14 @@ class ProductoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::get();
+        if($request->buscar){
+            $productos = Producto::where('nombre', 'like', '%'.$request->buscar.'%')->get();
+        }else{
+
+            $productos = Producto::get();
+        }
         return view("admin.producto.lista", compact('productos'));
     }
 
@@ -47,6 +52,11 @@ class ProductoController extends Controller
         ]);
 
         // subir la imagen
+        $nombre_imagen = "";
+        if($file = $request->file("imagen")){
+            $nombre_imagen = $file->getClientOriginalName();
+            $file->move("imagenes", $nombre_imagen);
+        }
 
         //guardar
         $prod = new Producto;
@@ -55,6 +65,7 @@ class ProductoController extends Controller
         $prod->cantidad = $request->cantidad;
         $prod->descripcion = $request->descripcion;
         $prod->categoria_id = $request->categoria_id;
+        $prod->imagen = $nombre_imagen;
         $prod->save();
 
         // redireccionar
@@ -80,7 +91,9 @@ class ProductoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $producto = Producto::find($id);
+        $categorias = Categoria::get();
+        return view("admin.producto.editar", compact('producto', 'categorias'));
     }
 
     /**
@@ -92,7 +105,36 @@ class ProductoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // validacion
+        $request->validate([
+            "nombre" => "required|max:150",
+            "categoria_id" => "required",
+            "cantidad" => "required"           
+
+        ]);
+
+       
+        //guardar
+        $prod = Producto::find($id);
+        $prod->nombre = $request->nombre;
+        $prod->precio = $request->precio;
+        $prod->cantidad = $request->cantidad;
+        $prod->descripcion = $request->descripcion;
+        $prod->categoria_id = $request->categoria_id;
+
+         // subir la imagen
+         
+         if($file = $request->file("imagen")){
+             $nombre_imagen = $file->getClientOriginalName();
+             $file->move("imagenes", $nombre_imagen);
+             $prod->imagen = $nombre_imagen;
+        }
+        
+        $prod->save();
+
+        // redireccionar
+        return redirect("/admin/producto")->with('mensaje', "Producto Modificado");
+
     }
 
     /**
@@ -103,6 +145,9 @@ class ProductoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prod = Producto::find($id);
+        $prod->delete();
+        return redirect("/admin/producto")->with('mensaje', "Producto Eliminado");
+
     }
 }

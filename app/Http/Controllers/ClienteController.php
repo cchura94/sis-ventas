@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Cliente;
+
 class ClienteController extends Controller
 {
     /**
@@ -13,7 +15,8 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        //
+        $clientes = Cliente::get();
+        return view("admin.cliente.lista", compact('clientes'));
     }
 
     /**
@@ -34,7 +37,14 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $clie = new Cliente;
+        $clie->nombres = $request->nombres;
+        $clie->apellidos = $request->apellidos;
+        $clie->ci_nit = $request->ci_nit;
+        $clie->correo = $request->correo;
+
+        $clie->save();
+        return redirect("/admin/cliente")->with("mensaje", "Cliente Registrado");
     }
 
     /**

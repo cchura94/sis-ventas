@@ -16,7 +16,7 @@
         </div>
     @endif
 
-        <form action="{{ route('producto.store') }}" method="post">
+        <form action="{{ route('producto.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <label for="">Nombre:</label>
             <input type="text" name="nombre" class="form-control" value="{{old('nombre')}}">
