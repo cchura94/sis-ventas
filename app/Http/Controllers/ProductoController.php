@@ -8,6 +8,9 @@ use App\Models\Categoria;
 
 class ProductoController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['role:gerente','permission:producto.index|producto.create']);
+    }
     /**
      * Display a listing of the resource.
      *

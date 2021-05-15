@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\RolePermisosController;
 use App\Http\Controllers\UsuarioController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +32,7 @@ Route::get('/', function () {
 // admin
 // [ /admin , /admin/producto , /admin/pedido ... ]
 
-Route::prefix("/admin")->group(function(){
+Route::middleware(["auth"])->prefix("/admin")->group(function(){
 
     Route::get('/', function () {
         return view('admin.administrador');
@@ -44,6 +45,9 @@ Route::prefix("/admin")->group(function(){
     Route::resource("/pedido", PedidoController::class);
 
     Route::post("/usuario/{id_user}/asinar_role", [UsuarioController::class, "asignarRoleAUsuario"])->name("asignar_role_usuario");
+    Route::post("/usuario/{id_user}/quitar_role", [UsuarioController::class, "quitarRoleAUsuario"])->name("eliminar_role_user");
+    
+    
     Route::resource("/usuario", UsuarioController::class);
     
     Route::get("/permisos", [RolePermisosController::class, "principal"])->name('permisos_index');
@@ -58,3 +62,7 @@ Route::prefix("/admin")->group(function(){
     
 });
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

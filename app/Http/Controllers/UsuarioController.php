@@ -38,7 +38,18 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "email" => "required|unique:users",
+            "password" => "required"
+        ]);
+
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -89,8 +100,17 @@ class UsuarioController extends Controller
     public function asignarRoleAUsuario(Request $request, $id_user)
     {
         $user = User::find($id_user);
-        $user->assignRole($request->name);
+        $user->assignRole($request->roles);
 
         return redirect()->back();
     }
+
+    public function quitarRoleAUsuario(Request $request, $id_user)
+    {
+        $user = User::find($id_user);
+        $user->removeRole($request->rol);
+
+        return redirect()->back();
+    }
+    
 }

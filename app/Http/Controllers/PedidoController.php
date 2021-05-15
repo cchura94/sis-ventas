@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Pedido;
+
 class PedidoController extends Controller
 {
     /**
@@ -13,7 +15,8 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        //
+        $pedidos = Pedido::All();
+        return view("admin.pedido.lista", compact('pedidos'));
     }
 
     /**
@@ -23,7 +26,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        //
+        return view("admin.pedido.nuevo");
     }
 
     /**
@@ -34,7 +37,17 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // array de productos con su cantidad
+        //datos del cliente
+        
+        $ped = new Pedido;
+        $ped->fecha_pedido = now();
+        $ped->estado = 0;
+        $ped->cliente_id = 0;
+        $ped->save();
+        // id_cli
+        
+
     }
 
     /**
