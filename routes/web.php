@@ -38,6 +38,9 @@ Route::middleware(["auth"])->prefix("/admin")->group(function(){
         return view('admin.administrador');
     });
 
+    Route::get('/producto/buscar', [ProductoController::class, "buscarProducto"]);
+    Route::get('/cliente/buscar', [ClienteController::class, "buscarCliente"]);
+
     Route::resource("/categoria", CategoriaController::class);
     Route::resource("/producto", ProductoController::class);
     Route::resource("/cliente", ClienteController::class);

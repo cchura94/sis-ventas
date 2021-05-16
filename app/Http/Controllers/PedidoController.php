@@ -26,6 +26,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
+
         return view("admin.pedido.nuevo");
     }
 
@@ -37,16 +38,26 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
+        //return $request;
         // array de productos con su cantidad
         //datos del cliente
-        
+        $cliente_id = $request->cliente_id;
+
         $ped = new Pedido;
-        $ped->fecha_pedido = now();
+        $ped->fecha_pedido = date('Y-m-d H:i:s');
         $ped->estado = 0;
-        $ped->cliente_id = 0;
+        $ped->cliente_id = $cliente_id;
         $ped->save();
-        // id_cli
+
+        // asignacion de producto a los pedidos
+        foreach ($request->carrito as $prod ) {
+            
+            $ped->productos()->attach($prod["producto_id"], ["cantidad" =>$prod["cantidad"] ]);
+        }
+
+        $ped->estado = 1;
         
+        return redirect("/admin/pedido");
 
     }
 

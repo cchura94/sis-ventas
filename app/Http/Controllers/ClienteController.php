@@ -19,6 +19,15 @@ class ClienteController extends Controller
         return view("admin.cliente.lista", compact('clientes'));
     }
 
+    public function buscarCliente(Request $request)
+    {
+        if($request->buscar){
+            $clientes = Cliente::where('ci_nit', 'like', '%'.$request->buscar.'%')->get();
+            return response()->json($clientes);
+        }
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -27,6 +27,15 @@ class ProductoController extends Controller
         return view("admin.producto.lista", compact('productos'));
     }
 
+    public function buscarProducto(Request $request)
+    {
+        if($request->buscar){
+            $productos = Producto::where('nombre', 'like', '%'.$request->buscar.'%')->get();
+            return response()->json($productos);
+        }
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -83,7 +92,7 @@ class ProductoController extends Controller
      */
     public function show($id)
     {
-        //
+        return "SHOW";
     }
 
     /**
